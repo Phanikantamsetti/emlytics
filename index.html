@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>EMLYTICS — Security Triage Workbench</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="EMLYTICS home"><span class="brand-mark">E</span><span>EML<span class="brand-accent">YTICS</span></span></a>
+    <span class="local-badge"><span class="status-dot"></span> LOCAL ANALYSIS</span>
+  </header>
+  <main class="shell">
+    <section class="intro">
+      <p class="eyebrow">EMAIL SECURITY · THREAT TRIAGE</p>
+      <h1>Look closer.<br><span>Stay safer.</span></h1>
+      <p class="subtitle">Triage email and inspect URLs, domains, HTML, and PDFs in one private, local-first workspace.</p>
+    </section>
+
+    <section class="workspace" aria-labelledby="analyze-heading">
+      <div class="workspace-heading">
+        <div><p class="eyebrow">ANALYSIS WORKSPACE</p><h2 id="analyze-heading">Analyze a message</h2></div>
+        <span class="privacy-note">Your email is not saved</span>
+      </div>
+      <p id="public-demo-notice" class="public-demo-notice" role="note" hidden></p>
+      <form id="analyze-form">
+        <label class="dropzone" id="dropzone" for="email-file">
+          <input id="email-file" type="file" accept=".eml,message/rfc822" hidden>
+          <span class="upload-icon" aria-hidden="true">↑</span>
+          <span class="drop-title">Drop an <strong>.eml</strong> file here</span>
+          <span class="drop-subtitle">or <span class="browse-link">browse files</span> · Maximum 1 MB</span>
+          <span id="file-name" class="file-name" aria-live="polite"></span>
+        </label>
+        <div class="or-divider"><span>OR PASTE RAW EMAIL</span></div>
+        <label class="visually-hidden" for="raw-email">Raw email source</label>
+        <textarea id="raw-email" placeholder="Paste the complete message source, including its headers…" spellcheck="false"></textarea>
+        <div class="form-footer">
+          <p class="helper-text">Only standard email content is inspected. Attachments are never opened.</p>
+          <button id="analyze-button" type="submit"><span>Analyze email</span><span aria-hidden="true">↗</span></button>
+        </div>
+        <p id="error-message" class="error-message" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section class="workspace secondary-workspace" aria-labelledby="other-input-heading">
+      <div class="workspace-heading">
+        <div><p class="eyebrow">LOCAL INDICATOR REVIEW</p><h2 id="other-input-heading">Analyze a URL, domain, HTML, or PDF</h2></div>
+        <span class="privacy-note">No external lookups</span>
+      </div>
+      <form id="indicator-form">
+        <label for="analysis-type">Input type</label>
+        <select id="analysis-type">
+          <option value="url">URL</option>
+          <option value="domain">Domain name</option>
+          <option value="html">HTML source</option>
+          <option value="pdf">PDF document</option>
+        </select>
+        <div id="text-input-group">
+          <label id="tool-value-label" for="tool-value">URL to inspect</label>
+          <textarea id="tool-value" placeholder="https://example.test/login" spellcheck="false"></textarea>
+        </div>
+        <div id="pdf-input-group" hidden>
+          <label for="pdf-file">PDF file · Maximum 5 MB</label>
+          <input id="pdf-file" type="file" accept=".pdf,application/pdf">
+        </div>
+        <div class="form-footer">
+          <p id="tool-helper" class="helper-text">The URL is inspected without being visited; no DNS or reputation lookup is made.</p>
+          <button id="indicator-button" type="submit"><span>Analyze input</span><span aria-hidden="true">↗</span></button>
+        </div>
+      </form>
+    </section>
+
+    <section class="workspace triage-workspace" aria-labelledby="triage-context-heading">
+      <div class="workspace-heading">
+        <div><p class="eyebrow">CASE MANAGEMENT</p><h2 id="triage-context-heading">Triage context <span class="optional-label">OPTIONAL</span></h2></div>
+        <span class="privacy-note">Browser only · not scored</span>
+      </div>
+      <p class="helper-text triage-intro">Add case details to help organize this review. These values are not sent to the analyzer or saved.</p>
+      <div class="triage-fields">
+        <div class="triage-field">
+          <label for="report-source">Reported through</label>
+          <select id="report-source">
+            <option value="">Not specified</option>
+            <option>User report</option>
+            <option>Email security gateway</option>
+            <option>SOC queue</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="triage-field">
+          <label for="case-priority">Case priority</label>
+          <select id="case-priority">
+            <option value="">Not set</option>
+            <option>Low</option>
+            <option>Normal</option>
+            <option>High</option>
+            <option>Critical</option>
+          </select>
+        </div>
+        <div class="triage-field">
+          <label for="impacted-account">Impacted account or team</label>
+          <input id="impacted-account" type="text" maxlength="160" placeholder="e.g. finance team">
+        </div>
+        <div class="triage-field triage-notes-field">
+          <label for="analyst-notes">Analyst notes</label>
+          <textarea id="analyst-notes" maxlength="1000" placeholder="Add context or follow-up actions…"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="results" aria-live="polite" hidden></section>
+    <footer><span>EMLYTICS <span class="footer-separator">/</span> EMAIL & INDICATOR TRIAGE</span><span>Local heuristic analysis · No input retention</span></footer>
+  </main>
+</body>
+</html>
