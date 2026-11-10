@@ -11,3 +11,17 @@ services:
         value: 3.12.10
       - key: EMLYTICS_PUBLIC_DEMO
         value: "1"
+      - key: EMLYTICS_VIRUSTOTAL_API_KEY
+        sync: false
+      - key: EMLYTICS_URLSCAN_API_KEY
+        sync: false
+      - key: EMLYTICS_SUPABASE_URL
+        sync: false
+      - key: EMLYTICS_SUPABASE_ANON_KEY
+        sync: false
+      - key: EMLYTICS_AI_API_KEY
+        sync: false
+      - key: EMLYTICS_AI_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/openai
+      - key: EMLYTICS_AI_MODEL
+        value: gemini-2.5-flash

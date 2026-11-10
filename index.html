@@ -4,23 +4,89 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1020">
-  <title>EMLYTICS — Security Triage Workbench</title>
+  <title>EMLYTICS — Domain & Email Security Workbench</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="/" aria-label="EMLYTICS home"><span class="brand-mark">E</span><span>EML<span class="brand-accent">YTICS</span></span></a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="#domain-scan">Domain scan</a>
+      <a href="#email-lab">Email lab</a>
+      <a href="#intelligence-tools">Compare & URL</a>
+      <a href="#account-workspace">Account</a>
+      <a href="#scan-history">History</a>
+    </nav>
     <span class="local-badge"><span class="status-dot"></span> LOCAL ANALYSIS</span>
   </header>
   <main class="shell">
     <section class="intro">
-      <p class="eyebrow">EMAIL SECURITY · THREAT TRIAGE</p>
-      <h1>Look closer.<br><span>Stay safer.</span></h1>
-      <p class="subtitle">Triage email and inspect URLs, domains, HTML, and PDFs in one private, local-first workspace.</p>
+      <p class="eyebrow">EMLYTICS SECURITY WORKBENCH</p>
+      <h1>Clarity for every<br><span>security signal.</span></h1>
+      <p class="subtitle">Investigate domains, triage suspicious email, and review indicators in one explainable workspace.</p>
+      <div class="hero-actions">
+        <a class="button-link" href="#domain-scan">Scan a public domain <span aria-hidden="true">↗</span></a>
+        <a class="hero-secondary-link" href="#email-lab">Investigate an email</a>
+      </div>
+      <div class="feature-strip" aria-label="Available analysis tools">
+        <span>DOMAIN POSTURE</span><span>EMAIL TRIAGE</span><span>THREAT INTELLIGENCE</span><span>LOCAL HISTORY</span>
+      </div>
     </section>
 
-    <section class="workspace" aria-labelledby="analyze-heading">
+    <section id="domain-scan" class="workspace domain-scan-workspace" aria-labelledby="domain-scan-heading">
+      <div class="workspace-heading">
+        <div><p class="eyebrow">DOMAIN SECURITY</p><h2 id="domain-scan-heading">Scan a public domain</h2></div>
+        <span class="privacy-note">Read-only · no API key required</span>
+      </div>
+      <p class="helper-text scan-description">Review DNS records, domain registration data, HTTPS certificate, and common security headers. You can enter a hostname or paste a full URL; only its hostname is checked. This is a configuration review, not a vulnerability scan or safety guarantee.</p>
+      <form id="domain-scan-form">
+        <label class="visually-hidden" for="domain-scan-value">Public domain name</label>
+        <div class="domain-entry">
+          <input id="domain-scan-value" type="text" maxlength="2048" placeholder="example.com or https://example.com" autocomplete="url" required>
+          <button id="domain-scan-button" type="submit"><span>Run domain check</span><span aria-hidden="true">↗</span></button>
+        </div>
+        <label class="consent-row"><input id="domain-scan-consent" type="checkbox" required> I understand this sends the domain to public DNS and RDAP services and makes a read-only HTTPS HEAD request to the site. No redirects are followed.</label>
+        <label class="consent-row"><input id="domain-reputation-lookup" type="checkbox" disabled> Also check this domain with configured reputation providers</label>
+        <label class="history-opt-in"><input id="domain-history-opt-in" type="checkbox"> Save this scan summary to this browser's history</label>
+        <p class="helper-text external-lookup-note">Reputation lookup is optional and sends only the domain to configured providers.</p>
+        <p class="helper-text">Checks are limited to public IP addresses. Scan requests are not saved by the server.</p>
+        <p id="domain-scan-error" class="error-message" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section id="intelligence-tools" class="workspace tools-workspace" aria-labelledby="intelligence-tools-heading">
+      <div class="workspace-heading">
+        <div><p class="eyebrow">INVESTIGATION TOOLS</p><h2 id="intelligence-tools-heading">Compare domains and inspect URLs</h2></div>
+        <span class="privacy-note">Scans require an explicit action</span>
+      </div>
+      <div class="tool-columns">
+        <form id="compare-form" class="tool-card">
+          <h3>Compare two domains</h3>
+          <p class="helper-text">Runs the same read-only DNS, RDAP and HTTPS posture checks for both public domains. It does not crawl either site.</p>
+          <label for="compare-domain-one">First domain</label>
+          <input id="compare-domain-one" type="text" maxlength="253" placeholder="first.example" required>
+          <label for="compare-domain-two">Second domain</label>
+          <input id="compare-domain-two" type="text" maxlength="253" placeholder="second.example" required>
+          <label class="consent-row"><input id="compare-consent" type="checkbox" required> I understand both public domains will be checked against DNS/RDAP services and their HTTPS endpoints.</label>
+          <button type="submit">Compare domains</button>
+          <p id="compare-error" class="error-message" role="alert" hidden></p>
+          <div id="compare-results" class="tool-results" aria-live="polite"></div>
+        </form>
+        <form id="url-intelligence-form" class="tool-card">
+          <h3>URL intelligence</h3>
+          <p class="helper-text">Normalizes the URL and checks for common brand lookalikes and punycode. The URL is never opened. Reputation lookup is optional.</p>
+          <label for="url-intelligence-value">Full URL</label>
+          <input id="url-intelligence-value" type="url" maxlength="2048" placeholder="https://example.com/login" required>
+          <label class="consent-row"><input id="url-reputation-opt-in" type="checkbox" disabled> Send this URL/domain to configured reputation providers</label>
+          <button type="submit">Inspect URL</button>
+          <p id="url-intelligence-error" class="error-message" role="alert" hidden></p>
+          <div id="url-intelligence-results" class="tool-results" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="email-lab" class="workspace" aria-labelledby="analyze-heading">
       <div class="workspace-heading">
         <div><p class="eyebrow">ANALYSIS WORKSPACE</p><h2 id="analyze-heading">Analyze a message</h2></div>
         <span class="privacy-note">Your email is not saved</span>
@@ -37,6 +103,12 @@
         <div class="or-divider"><span>OR PASTE RAW EMAIL</span></div>
         <label class="visually-hidden" for="raw-email">Raw email source</label>
         <textarea id="raw-email" placeholder="Paste the complete message source, including its headers…" spellcheck="false"></textarea>
+        <div class="external-lookup-controls">
+          <label class="external-lookup-label"><input id="email-external-lookup" class="external-lookup" type="checkbox" disabled> Send extracted links and sender domain to configured reputation providers</label>
+          <label><input id="email-urlscan-submit" class="urlscan-submit" type="checkbox" disabled> Submit links for new public URLScan.io scans (the scanner visits each URL)</label>
+          <p class="helper-text external-lookup-note">Email text, headers, and attachments are not sent. Up to 5 links/domains are checked; indicator data is shared with the selected providers.</p>
+        </div>
+        <label class="history-opt-in"><input id="email-history-opt-in" type="checkbox"> Save a minimal scan summary to this browser's history</label>
         <div class="form-footer">
           <p class="helper-text">Only standard email content is inspected. Attachments are never opened.</p>
           <button id="analyze-button" type="submit"><span>Analyze email</span><span aria-hidden="true">↗</span></button>
@@ -45,11 +117,12 @@
       </form>
     </section>
 
-    <section class="workspace secondary-workspace" aria-labelledby="other-input-heading">
+    <section id="indicator-lab" class="workspace secondary-workspace" aria-labelledby="other-input-heading">
       <div class="workspace-heading">
-        <div><p class="eyebrow">LOCAL INDICATOR REVIEW</p><h2 id="other-input-heading">Analyze a URL, domain, HTML, or PDF</h2></div>
-        <span class="privacy-note">No external lookups</span>
+        <div><p class="eyebrow">QUICK INPUT CHECKS</p><h2 id="other-input-heading">Analyze a URL, domain, HTML, or PDF</h2></div>
+        <span class="privacy-note">No site is contacted unless you opt in</span>
       </div>
+      <p class="helper-text">These checks inspect the input you provide; they do not visit websites by default. Choose a type to see exactly what is checked. For DNS, registration, TLS, and security-header checks, use the separate public-domain scan above.</p>
       <form id="indicator-form">
         <label for="analysis-type">Input type</label>
         <select id="analysis-type">
@@ -66,8 +139,14 @@
           <label for="pdf-file">PDF file · Maximum 5 MB</label>
           <input id="pdf-file" type="file" accept=".pdf,application/pdf">
         </div>
+        <div class="external-lookup-controls">
+          <label class="external-lookup-label"><input id="indicator-external-lookup" class="external-lookup" type="checkbox" disabled> Send extracted links and domain to configured reputation providers</label>
+          <label><input id="indicator-urlscan-submit" class="urlscan-submit" type="checkbox" disabled> Submit links for new public URLScan.io scans (the scanner visits each URL)</label>
+          <p class="helper-text external-lookup-note">Only indicators are sent, not HTML/PDF text or files. Up to 5 links/domains are checked.</p>
+        </div>
+        <label class="history-opt-in"><input id="indicator-history-opt-in" type="checkbox"> Save a minimal scan summary to this browser's history</label>
         <div class="form-footer">
-          <p id="tool-helper" class="helper-text">The URL is inspected without being visited; no DNS or reputation lookup is made.</p>
+          <p id="tool-helper" class="helper-text">Checks the URL format and common link warning signs only. It does not open the site; optional reputation lookups are available when configured.</p>
           <button id="indicator-button" type="submit"><span>Analyze input</span><span aria-hidden="true">↗</span></button>
         </div>
       </form>
@@ -112,7 +191,59 @@
     </section>
 
     <section id="results" class="results" aria-live="polite" hidden></section>
-    <footer><span>EMLYTICS <span class="footer-separator">/</span> EMAIL & INDICATOR TRIAGE</span><span>Local heuristic analysis · No input retention</span></footer>
+    <section id="account-workspace" class="workspace account-workspace" aria-labelledby="account-heading">
+      <div class="workspace-heading">
+        <div><p class="eyebrow">PRIVATE WORKSPACE</p><h2 id="account-heading">Account, saved reports, and watchlist</h2></div>
+        <span id="account-state" class="privacy-note">Checking account configuration…</span>
+      </div>
+      <p class="helper-text account-notice">Accounts use Supabase. Email bodies and raw headers are not saved; report findings and extracted indicators are saved only when you choose Save to account. Watchlist checks run only when you request them.</p>
+      <form id="auth-form" class="auth-form">
+        <label for="account-email">Email</label>
+        <input id="account-email" type="email" maxlength="320" autocomplete="email" required>
+        <label for="account-password">Password (minimum 10 characters)</label>
+        <input id="account-password" type="password" minlength="10" maxlength="256" autocomplete="current-password" required>
+        <div class="auth-actions">
+          <button id="account-login-button" type="submit">Sign in</button>
+          <button id="account-signup-button" type="button" class="button-secondary">Create account</button>
+          <button id="account-reset-button" type="button" class="button-secondary">Reset password</button>
+        </div>
+        <p id="account-error" class="error-message" role="alert" hidden></p>
+      </form>
+      <div id="signed-in-panel" hidden>
+        <div class="account-toolbar"><span id="signed-in-email"></span><button id="account-logout-button" type="button" class="button-secondary">Sign out</button></div>
+        <div class="account-columns">
+          <section class="tool-card">
+            <h3>Watchlist</h3>
+            <p class="helper-text">Checks are manual and limited to 10 domains. No background monitoring or automatic alerts.</p>
+            <form id="watchlist-form">
+              <label for="watchlist-domain">Add a public domain</label>
+              <input id="watchlist-domain" type="text" maxlength="253" placeholder="example.com" required>
+              <button type="submit">Add to watchlist</button>
+            </form>
+            <button id="check-watchlist-button" type="button" class="button-secondary">Check watchlist now</button>
+            <p id="watchlist-error" class="error-message" role="alert" hidden></p>
+            <div id="watchlist-list" class="account-list"></div>
+          </section>
+          <section class="tool-card">
+            <h3>Saved reports</h3>
+            <p class="helper-text">Up to 50 reports are shown. Email message bodies and raw headers are excluded.</p>
+            <button id="refresh-reports-button" type="button" class="button-secondary">Refresh reports</button>
+            <p id="reports-error" class="error-message" role="alert" hidden></p>
+            <div id="saved-report-list" class="account-list"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section id="scan-history" class="workspace history-workspace" aria-labelledby="history-heading">
+      <div class="workspace-heading">
+        <div><p class="eyebrow">THIS BROWSER ONLY</p><h2 id="history-heading">Recent scans</h2></div>
+        <button id="clear-history" class="button-secondary" type="button">Clear history</button>
+      </div>
+      <p class="helper-text">History is off unless you choose to save a scan. Only scan type, target, time, and summary score are stored here; email contents are never saved.</p>
+      <div id="history-list" class="history-list"><p class="empty-state">No saved scans yet.</p></div>
+    </section>
+    <footer><span>EMLYTICS <span class="footer-separator">/</span> SECURITY ANALYSIS WORKBENCH</span><span>Explainable checks · No input retention by default</span></footer>
   </main>
 </body>
 </html>
